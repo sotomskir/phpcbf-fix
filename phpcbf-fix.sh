@@ -6,6 +6,10 @@ else
 fi
 GIT_COMMIT=`git --no-pager log -1 --pretty=format:"%H"`
 FILES_CHANGED=`git diff --name-only --diff-filter=ACMTR ${GIT_COMMIT}^1..${GIT_COMMIT} | cat | grep -iE '*.php' | grep -vE '.blade.php$'`
+if [ "x" == "x${FILES_CHANGED}" ]; then
+  echo "NOTHING TO FIX"
+  exit 0
+fi
 echo "FIXING CODE SNIFFS"
 echo "${FILES_CHANGED}" | xargs phpcbf --standard=${PHPCS_STANDARD}
 echo "FIXING FINISHED"
